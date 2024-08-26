@@ -32,14 +32,16 @@ jobs:
           base: master
     
       - name: Merge Pull Request
+        id: auto-merge
         if: steps.create-pr.outputs.pull-request-operation == 'opened'
         uses: pascalgn/automerge-action@v0.16.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: ""
+          MERGE_LABELS: "auto-merge"
           MERGE_METHOD: "squash"
           MERGE_COMMIT_MESSAGE: "Auto-merged PR #${{ steps.create-pr.outputs.pull-request-number }}"
           MERGE_FORKS: "false"
           MERGE_RETRIES: "6"
           MERGE_RETRY_SLEEP: "10000"
           MERGE_DELETE_BRANCH: "true"
+          MERGE_REQUIRED_APPROVALS: "0"
