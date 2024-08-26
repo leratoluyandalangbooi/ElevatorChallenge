@@ -1,0 +1,47 @@
+name: Auto PR and Merge
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  auto-pr-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v6.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Auto PR from ${{ github.ref }}
+          title: Auto PR from ${{ github.ref }}
+          body: |
+            Automated pull request created from ${{ github.ref }}
+          branch: ${{ github.ref }}
+          base: master
+    
+      - name: Merge Pull Request
+        id: auto-merge
+        if: steps.create-pr.outputs.pull-request-operation == 'opened'
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_LABELS: "auto-merge"
+          MERGE_METHOD: "squash"
+          MERGE_COMMIT_MESSAGE: "Auto-merged PR #${{ steps.create-pr.outputs.pull-request-number }}"
+          MERGE_FORKS: "false"
+          MERGE_RETRIES: "6"
+          MERGE_RETRY_SLEEP: "10000"
+          MERGE_DELETE_BRANCH: "true"
+          MERGE_REQUIRED_APPROVALS: "0"
