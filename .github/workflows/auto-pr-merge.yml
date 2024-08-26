@@ -31,12 +31,6 @@ jobs:
           branch: ${{ github.ref }}
           base: master
 
-      - name: Auto-approve Pull Request
-        uses: hmarr/auto-approve-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
-
       - name: Merge Pull Request
         if: steps.create-pr.outputs.pull-request-operation == 'created'
         uses: pascalgn/automerge-action@v0.15.3
