@@ -1,4 +1,5 @@
-﻿namespace ElevatorChallenge.Core.Entities;
+﻿
+namespace ElevatorChallenge.Core.Entities;
 
 public class Passenger
 {
@@ -11,5 +12,15 @@ public class Passenger
         Id = id;
         DestnationFloor = destinationFloor;
         Weight = weight;
+    }
+
+    internal static void Add(Passenger passenger)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static void Remove(Passenger passenger)
+    {
+        throw new NotImplementedException();
     }
 }
