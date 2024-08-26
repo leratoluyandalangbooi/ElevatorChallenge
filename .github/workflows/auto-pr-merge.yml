@@ -32,7 +32,7 @@ jobs:
           base: master
     
       - name: Merge Pull Request
-        # if: steps.create-pr.outputs.pull-request-operation == 'created'
+        if: steps.create-pr.outputs.pull-request-operation == 'opened'
         uses: pascalgn/automerge-action@v0.16.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
