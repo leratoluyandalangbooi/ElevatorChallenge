@@ -7,6 +7,12 @@ public class Building
 
     public Building(int numberOfFloors, int numberOfElevators, int elevatorCapacity, int elevatorWeightLimit)
     {
+        if (numberOfFloors < 2)
+            throw new ArgumentException("Building must have at least 2 floors.", nameof(numberOfFloors));
+
+        if (numberOfElevators < 1)
+            throw new ArgumentException("Building must have at least 1 elevator.", nameof(numberOfElevators));
+
         Floors = Enumerable.Range(1, numberOfFloors)
                            .Select(floorNumber => new Floor(floorNumber))
                            .ToList();
@@ -18,12 +24,19 @@ public class Building
 
     public Floor GetFloor(int floorNumber)
     {
-        return Floors.FirstOrDefault(f => f.FloorNumber == floorNumber);
+        var floor = Floors.FirstOrDefault(f => f.FloorNumber == floorNumber);
+        if (floor == null) 
+            throw new ArgumentException($"Invalid floor number: {floorNumber}");
+        return floor;
+
     }
 
     public Elevator GetElevator(int elevatorId)
     {
-        return Elevators.FirstOrDefault(e => e.Id == elevatorId);
+        var elevator = Elevators.FirstOrDefault(e => e.Id == elevatorId);
+        if (elevator == null) 
+            throw new ArgumentException($"Invalid elevator ID: {elevatorId}");
+        return elevator;
     }
 
     private void AddPassengerToFloor(int floorNumber, Passenger passenger)

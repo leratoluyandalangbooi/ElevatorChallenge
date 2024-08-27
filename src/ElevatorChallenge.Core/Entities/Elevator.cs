@@ -6,9 +6,9 @@ public class Elevator
 {
     public int Id { get; private set; }
     public int CurrentFloor { get; private set; }
-    public Direction Direction {get; private set; }
+    public Direction Direction { get; private set; }
     public ElevatorStatus Status { get; private set; }
-    public List<Passenger> Passengers { get; } 
+    public List<Passenger> Passengers { get; }
     public int Capacity { get; }
     public int WeightLimit { get; }
     public int CurrentWeight => Passengers.Sum(p => p.Weight);
@@ -36,11 +36,10 @@ public class Elevator
 
     public void MoveElevator(int destinationFloor)
     {
-        if (destinationFloor == CurrentFloor) return; //skip don't currentFloor
+        if (destinationFloor == CurrentFloor)
+            return;
 
         Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
-       
-        //elevaor status
         Status = ElevatorStatus.Moving;
         CurrentFloor = destinationFloor;
         Status = ElevatorStatus.Idle;
@@ -48,10 +47,9 @@ public class Elevator
 
     public void AddPassenger(Passenger passenger)
     {
-        //check if its full?
         if (Passengers.Count < Capacity && CurrentWeight + passenger.Weight < WeightLimit)
         {
-            throw new ElevatorException("");
+            throw new ElevatorException("Cannot add passenger: Elevator capacity or weight limit reached");
         }
 
         Passengers.Add(passenger);

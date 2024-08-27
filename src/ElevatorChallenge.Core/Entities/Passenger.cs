@@ -1,5 +1,4 @@
-﻿
-namespace ElevatorChallenge.Core.Entities;
+﻿namespace ElevatorChallenge.Core.Entities;
 
 public class Passenger
 {
