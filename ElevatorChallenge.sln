@@ -13,12 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevatorChallenge.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevatorChallenge.ConsoleApp", "src\ElevatorChallenge.ConsoleApp\ElevatorChallenge.ConsoleApp.csproj", "{63C7FE82-3271-4CF8-BB6A-EC9B61AF7EF3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6D1862A4-0AAD-46F5-B53E-5F7A2A735A26}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		.github\workflows\auto-pr-merge.yml = .github\workflows\auto-pr-merge.yml
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{118FEE50-A94E-46AA-9916-696201ECBFFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorChallenge.Core.UnitTests", "tests\ElevatorChallenge.Core.UnitTests\ElevatorChallenge.Core.UnitTests.csproj", "{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +39,10 @@ Global
 		{63C7FE82-3271-4CF8-BB6A-EC9B61AF7EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63C7FE82-3271-4CF8-BB6A-EC9B61AF7EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63C7FE82-3271-4CF8-BB6A-EC9B61AF7EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +52,7 @@ Global
 		{65AF9619-C4CD-4F9C-BA0A-5C072411A6A0} = {C9F72F59-1760-4B9E-8BB1-6EC8F2DF0AC5}
 		{9A530E72-BF78-4C2F-B273-6937B199ED8B} = {C9F72F59-1760-4B9E-8BB1-6EC8F2DF0AC5}
 		{63C7FE82-3271-4CF8-BB6A-EC9B61AF7EF3} = {C9F72F59-1760-4B9E-8BB1-6EC8F2DF0AC5}
+		{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11} = {118FEE50-A94E-46AA-9916-696201ECBFFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7D1A212-95ED-4FE3-972A-0DD9C7CCC006}

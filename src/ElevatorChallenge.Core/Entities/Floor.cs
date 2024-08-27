@@ -17,10 +17,10 @@ public class Floor
         };
     }
 
-    public void AddWaitingPassnger(Passenger passenger)
+    public void AddWaitingPassenger(Passenger passenger)
     {
         WaitingPassengers.Enqueue(passenger);
-        UpdateElevetorCallButton(passenger.DestnationFloor);
+        UpdateElevetorCallButton(passenger.DestinationFloor);
     }
 
     private void UpdateElevetorCallButton(int destnationFloor)

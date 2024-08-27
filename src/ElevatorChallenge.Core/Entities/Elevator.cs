@@ -1,4 +1,5 @@
-﻿namespace ElevatorChallenge.Core.Entities;
+﻿
+namespace ElevatorChallenge.Core.Entities;
 
 public class Elevator
 {
@@ -45,7 +46,7 @@ public class Elevator
 
     public void AddPassenger(Passenger passenger)
     {
-        if (Passengers.Count < Capacity && CurrentWeight + passenger.Weight < WeightLimit)
+        if (!CanAddPassenger(passenger))
         {
             throw new ElevatorException("Cannot add passenger: Elevator capacity or weight limit reached");
         }
@@ -56,5 +57,10 @@ public class Elevator
     public void RemovePassenger(Passenger passenger)
     {
         Passengers.Remove(passenger);
+    }
+
+    public bool CanAddPassenger(Passenger passenger)
+    {
+        return Passengers.Count < Capacity && CurrentWeight + passenger.Weight < WeightLimit;
     }
 }

@@ -3,13 +3,13 @@
 public class Passenger
 {
     public int Id { get; }
-    public int DestnationFloor { get; }
+    public int DestinationFloor { get; }
     public int Weight { get; }
 
     public Passenger(int id, int destinationFloor, int weight)
     {
         Id = id;
-        DestnationFloor = destinationFloor;
+        DestinationFloor = destinationFloor;
         Weight = weight;
     }
 }
