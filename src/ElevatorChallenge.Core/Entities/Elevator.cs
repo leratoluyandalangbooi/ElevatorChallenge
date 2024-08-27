@@ -54,11 +54,11 @@ public class Elevator
             throw new ElevatorException("");
         }
 
-        Passenger.Add(passenger);
+        Passengers.Add(passenger);
     }
 
     public void RemovePassenger(Passenger passenger)
     {
-        Passenger.Remove(passenger);
+        Passengers.Remove(passenger);
     }
 }

@@ -13,14 +13,4 @@ public class Passenger
         DestnationFloor = destinationFloor;
         Weight = weight;
     }
-
-    internal static void Add(Passenger passenger)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal static void Remove(Passenger passenger)
-    {
-        throw new NotImplementedException();
-    }
 }
