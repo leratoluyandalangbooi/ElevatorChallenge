@@ -1,13 +1,11 @@
-﻿using ElevatorChallenge.Core.Exceptions;
-
-namespace ElevatorChallenge.Core.Entities;
+﻿namespace ElevatorChallenge.Core.Entities;
 
 public class Elevator
 {
     public int Id { get; private set; }
-    public int CurrentFloor { get; private set; }
+    public int CurrentFloor { get; set; }
     public Direction Direction { get; private set; }
-    public ElevatorStatus Status { get; private set; }
+    public ElevatorStatus Status { get; set; }
     public List<Passenger> Passengers { get; }
     public int Capacity { get; }
     public int WeightLimit { get; }
