@@ -42,6 +42,6 @@ public class Building
     private void AddPassengerToFloor(int floorNumber, Passenger passenger)
     {
         var floor = GetFloor(floorNumber);
-        floor.AddWaitingPassnger(passenger);
+        floor.AddWaitingPassenger(passenger);
     }
 }
