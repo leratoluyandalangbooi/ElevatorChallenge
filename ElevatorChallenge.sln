@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevatorChallenge.ConsoleAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{118FEE50-A94E-46AA-9916-696201ECBFFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorChallenge.Core.UnitTests", "tests\ElevatorChallenge.Core.UnitTests\ElevatorChallenge.Core.UnitTests.csproj", "{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElevatorChallenge.Core.UnitTests", "tests\ElevatorChallenge.Core.UnitTests\ElevatorChallenge.Core.UnitTests.csproj", "{390E4EB3-F5EB-4E78-8551-FC2DDE7EDE11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
