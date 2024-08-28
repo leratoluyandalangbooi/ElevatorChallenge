@@ -42,6 +42,8 @@ public class SimulationEngine
                 case ElevatorStatus.Unloading:
                     HandleUnloadingElevator(elevator);
                     break;
+                default:
+                    throw new ElevatorException("Elevator out of service");
             }
         }
     }
@@ -99,7 +101,7 @@ public class SimulationEngine
 
     private async Task CallElevator(int floor, Direction direction)
     {
-        throw new NotImplementedException();
+        await _elevatorService.DispatchElevatorAsync(floor, direction); 
     }
 
     private async Task MoveElevator(int elevatorId, int destinationFloor)

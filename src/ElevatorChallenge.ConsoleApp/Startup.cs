@@ -1,6 +1,7 @@
 ﻿using ElevatorChallenge.Application.Services;
 using ElevatorChallenge.Core.Entities;
 using ElevatorChallenge.Core.Interfaces;
+using ElevatorChallenge.Infrastructure.Strategies;
 using ElevatorChallenge.Infrastructure.UserInterface;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ public class Startup
         var services = new ServiceCollection();
 
         services.AddSingleton<Building>(x => new Building(10, 3, 8, 2000));
+        services.AddSingleton<INearestAvailableElevatorStrategy, NearestAvailableElevatorStrategy>();
         services.AddSingleton<IElevatorService, ElevatorService>();
         services.AddSingleton<IConsoleUserInterface, ConsoleUserInterface>();
         services.AddSingleton<SimulationEngine>();

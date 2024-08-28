@@ -5,5 +5,6 @@ public enum ElevatorStatus
     Idle,
     Moving,
     Loading,
-    Unloading
+    Unloading,
+    OutOfService
 }
