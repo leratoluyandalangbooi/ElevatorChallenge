@@ -19,7 +19,7 @@ public class SimulationEngine
         {
             UpdateElevatorStatus();
             _consoleUserInterface.DisplayElevatorStatus(_building);
-            await HandleUserInput();
+            await HandleUserInputAsync();
             await Task.Delay(1000);
         }
     }
@@ -28,45 +28,14 @@ public class SimulationEngine
     {
         foreach (var elevator in _building.Elevators)
         {
-            switch (elevator.Status)
+            if (elevator.IsMoving)
             {
-                case ElevatorStatus.Idle:
-                    HandleIdleElevator(elevator);
-                    break;
-                case ElevatorStatus.Moving:
-                    HandleMovingElevator(elevator);
-                    break;
-                case ElevatorStatus.Loading:
-                    HandleLoadingElevator(elevator);
-                    break;
-                case ElevatorStatus.Unloading:
-                    HandleUnloadingElevator(elevator);
-                    break;
+                elevator.UpdateElevatorPosition();
             }
         }
     }
-
-    private void HandleIdleElevator(Elevator elevator)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void HandleMovingElevator(Elevator elevator)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void HandleLoadingElevator(Elevator elevator)
-    {
-        throw new NotImplementedException();
-    }
     
-    private void HandleUnloadingElevator(Elevator elevator)
-    {
-        throw new NotImplementedException();
-    }
-
-    private async Task HandleUserInput()
+    private async Task HandleUserInputAsync()
     {
         var input = await _consoleUserInterface.GetUserInputAsync();
 
@@ -78,11 +47,11 @@ public class SimulationEngine
         switch (inputParts[0].ToLower())
         {
             case "call":
-                await CallElevator(int.Parse(inputParts[1]), Enum.Parse<Direction>(inputParts[2], true));
+                await CallElevatorAsync(int.Parse(inputParts[1]), Enum.Parse<Direction>(inputParts[2], true));
                 break;
 
             case "move":
-                await MoveElevator(int.Parse(inputParts[1]), int.Parse(inputParts[2]));
+                await MoveElevatorAsync(int.Parse(inputParts[1]), int.Parse(inputParts[2]));
                 break;
 
             case "add":
@@ -97,18 +66,14 @@ public class SimulationEngine
         }
     }
 
-    private async Task CallElevator(int floor, Direction direction)
+    private async Task CallElevatorAsync(int floor, Direction direction)
     {
-        throw new NotImplementedException();
+        await _elevatorService.DispatchElevatorAsync(floor, direction); 
     }
 
-    private async Task MoveElevator(int elevatorId, int destinationFloor)
+    private async Task MoveElevatorAsync(int elevatorId, int destinationFloor)
     {
-        var elevator = _building.Elevators.FirstOrDefault(e => e.Id == elevatorId);
-
-        if (elevator == null)
-            throw new InputValidationException($"Invalid elevator ID: {elevatorId}");
-
+        var elevator = _building.GetElevator(elevatorId);
         await _elevatorService.MoveElevatorAsync(elevator, destinationFloor);
     }
 

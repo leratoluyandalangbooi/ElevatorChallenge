@@ -1,8 +1,7 @@
 ﻿using ElevatorChallenge.Application.Services;
-using ElevatorChallenge.ConsoleApp;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ElevatorChalleng.ConsoleApp;
+namespace ElevatorChallenge.ConsoleApp;
 
 class Program
 {
