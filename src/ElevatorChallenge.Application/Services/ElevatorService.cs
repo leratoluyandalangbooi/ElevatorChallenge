@@ -1,5 +1,4 @@
-﻿
-namespace ElevatorChallenge.Application.Services;
+﻿namespace ElevatorChallenge.Application.Services;
 
 public class ElevatorService : IElevatorService
 {
@@ -33,17 +32,27 @@ public class ElevatorService : IElevatorService
 
     public async Task MoveElevatorAsync(Elevator elevator, int destinationFloor)
     {
-        elevator.SetDestination(destinationFloor);
-        elevator.SetElevatorStatus(ElevatorStatus.Moving);
+        elevator.MoveElevator(destinationFloor);
 
-        while (elevator.CurrentFloor != destinationFloor)
+        while (elevator.IsMoving)
         {
             await Task.Delay(1000); //Delay movement simulator
-            elevator.MoveElevator(destinationFloor);
+            elevator.UpdateElevatorPosition();
         }
 
-        elevator.SetElevatorStatus(ElevatorStatus.Idle);
+        await OnLoadOrOffloadPassengersAsync(elevator);
     }
 
-    
+    private async Task OnLoadOrOffloadPassengersAsync(Elevator elevator)
+    {
+        // Offload passengers
+        var passengersToUnload = elevator.Passengers.Where(p => p.DestinationFloor == elevator.CurrentFloor).ToList();
+        foreach (var passenger in passengersToUnload)
+        {
+            elevator.RemovePassenger(passenger);
+        }
+
+        // Onload passengers
+        await LoadPassengersAsync(elevator, elevator.CurrentFloor);
+    }
 }
