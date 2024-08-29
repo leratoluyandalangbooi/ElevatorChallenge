@@ -11,6 +11,7 @@ public class Elevator
     public int Capacity { get; }
     public int WeightLimit { get; }
     public int CurrentWeight => Passengers.Sum(p => p.Weight);
+    public int DestinationFloor { get; private set; }
 
     public Elevator(int id, int capacity, int weightLimit)
     {
@@ -21,6 +22,7 @@ public class Elevator
         Passengers = new List<Passenger>();
         Capacity = capacity;
         WeightLimit = weightLimit;
+        DestinationFloor = 1;
     }
 
     public void SetElevatorStatus(ElevatorStatus elevatorStatus)
@@ -33,15 +35,45 @@ public class Elevator
         Direction = direction;
     }
 
+    public void SetDestination(int floor)
+    {
+        DestinationFloor = floor;
+        UpdateDirection();
+    }
+
     public void MoveElevator(int destinationFloor)
     {
-        if (destinationFloor == CurrentFloor)
-            return;
+        SetDestination(destinationFloor);
 
-        Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
-        Status = ElevatorStatus.Moving;
-        CurrentFloor = destinationFloor;
-        Status = ElevatorStatus.Idle;
+        if (CurrentFloor < DestinationFloor)
+        {
+            CurrentFloor++;
+        }
+        else if (CurrentFloor > DestinationFloor)
+        {
+            CurrentFloor--;
+        }
+
+        UpdateDirection();
+        UpdateStatus();
+    }
+
+    private void UpdateDirection()
+    {
+        Direction = DestinationFloor > CurrentFloor ? Direction.Up :
+                    DestinationFloor < CurrentFloor ? Direction.Down : Direction.Stationary;
+    }
+
+    private void UpdateStatus()
+    {
+        if (CurrentFloor == DestinationFloor)
+        {
+            Status = ElevatorStatus.Idle;
+        }
+        else
+        {
+            Status = ElevatorStatus.Moving;
+        }
     }
 
     public void AddPassenger(Passenger passenger)

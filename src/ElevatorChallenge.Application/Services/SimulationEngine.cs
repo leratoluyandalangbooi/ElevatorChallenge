@@ -19,7 +19,7 @@ public class SimulationEngine
         {
             UpdateElevatorStatus();
             _consoleUserInterface.DisplayElevatorStatus(_building);
-            await HandleUserInput();
+            await HandleUserInputAsync();
             await Task.Delay(1000);
         }
     }
@@ -50,25 +50,77 @@ public class SimulationEngine
 
     private void HandleIdleElevator(Elevator elevator)
     {
-        throw new NotImplementedException();
+        var pendingElevatorRequest = _building.Floors
+                                              .FirstOrDefault(f => f.ElevatorCallButtons[Direction.Up] || f.ElevatorCallButtons[Direction.Down]);
+        if (pendingElevatorRequest != null)
+        {
+            elevator.SetDestination(pendingElevatorRequest.FloorNumber);
+            elevator.SetElevatorStatus(ElevatorStatus.Moving);
+        }
     }
 
     private void HandleMovingElevator(Elevator elevator)
     {
-        throw new NotImplementedException();
+        elevator.MoveElevator(elevator.DestinationFloor);
+        if (elevator.CurrentFloor == elevator.DestinationFloor)
+        {
+            elevator.SetElevatorStatus(ElevatorStatus.Unloading);
+        }
     }
 
     private void HandleLoadingElevator(Elevator elevator)
     {
-        throw new NotImplementedException();
+        var currentFloor = _building.GetFloor(elevator.CurrentFloor);
+
+        while (currentFloor.WaitingPassengersCount > 0 && elevator.CanAddPassenger(currentFloor.WaitingPassengers.Peek()))
+        {
+            var passenger = currentFloor.RemoveWaitingPassenger();
+            elevator.AddPassenger(passenger!);
+        }
+
+        if (elevator.Passengers.Any())
+        {
+            elevator.SetElevatorStatus(ElevatorStatus.Moving);
+            int nextDestination = elevator.Passengers.Min(p => p.DestinationFloor);
+            elevator.SetDestination(nextDestination);
+        }
+        else if (!currentFloor.ElevatorCallButtons[Direction.Up] && !currentFloor.ElevatorCallButtons[Direction.Down])
+        {
+            elevator.SetElevatorStatus(ElevatorStatus.Idle);
+        }
     }
     
     private void HandleUnloadingElevator(Elevator elevator)
     {
-        throw new NotImplementedException();
+        var passengersToRemove = elevator.Passengers.Where(p => p.DestinationFloor == elevator.CurrentFloor).ToList();
+        foreach (var passenger in passengersToRemove)
+        {
+            elevator.RemovePassenger(passenger);
+        }
+
+        if (elevator.Passengers.Any())
+        {
+            elevator.SetElevatorStatus(ElevatorStatus.Moving);
+            int nextDestination = elevator.Direction == Direction.Up
+                ? elevator.Passengers.Min(p => p.DestinationFloor)
+                : elevator.Passengers.Max(p => p.DestinationFloor);
+            elevator.SetDestination(nextDestination);
+        }
+        else
+        {
+            var currentFloor = _building.GetFloor(elevator.CurrentFloor);
+            if (currentFloor.WaitingPassengersCount > 0)
+            {
+                elevator.SetElevatorStatus(ElevatorStatus.Loading);
+            }
+            else
+            {
+                elevator.SetElevatorStatus(ElevatorStatus.Idle);
+            }
+        }
     }
 
-    private async Task HandleUserInput()
+    private async Task HandleUserInputAsync()
     {
         var input = await _consoleUserInterface.GetUserInputAsync();
 
@@ -80,11 +132,11 @@ public class SimulationEngine
         switch (inputParts[0].ToLower())
         {
             case "call":
-                await CallElevator(int.Parse(inputParts[1]), Enum.Parse<Direction>(inputParts[2], true));
+                await CallElevatorAsync(int.Parse(inputParts[1]), Enum.Parse<Direction>(inputParts[2], true));
                 break;
 
             case "move":
-                await MoveElevator(int.Parse(inputParts[1]), int.Parse(inputParts[2]));
+                await MoveElevatorAsync(int.Parse(inputParts[1]), int.Parse(inputParts[2]));
                 break;
 
             case "add":
@@ -99,18 +151,15 @@ public class SimulationEngine
         }
     }
 
-    private async Task CallElevator(int floor, Direction direction)
+    private async Task CallElevatorAsync(int floor, Direction direction)
     {
         await _elevatorService.DispatchElevatorAsync(floor, direction); 
     }
 
-    private async Task MoveElevator(int elevatorId, int destinationFloor)
+    private async Task MoveElevatorAsync(int elevatorId, int destinationFloor)
     {
-        var elevator = _building.Elevators.FirstOrDefault(e => e.Id == elevatorId);
-
-        if (elevator == null)
-            throw new InputValidationException($"Invalid elevator ID: {elevatorId}");
-
+        var elevator = _building.GetElevator(elevatorId);
+        elevator.SetDestination(destinationFloor);
         await _elevatorService.MoveElevatorAsync(elevator, destinationFloor);
     }
 

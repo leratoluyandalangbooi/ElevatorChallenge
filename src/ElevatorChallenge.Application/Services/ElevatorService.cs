@@ -18,19 +18,6 @@ public class ElevatorService : IElevatorService
         await MoveElevatorAsync(elevator, requestedFloor);
         await LoadPassengersAsync(elevator, requestedFloor);
     }
-   
-    public async Task MoveElevatorAsync(Elevator elevator, int destinationFloor)
-    {
-        elevator.Status = ElevatorStatus.Moving;
-
-        while (elevator.CurrentFloor != destinationFloor)
-        {
-            await Task.Delay(1000); //Delay movement simulator
-            elevator.CurrentFloor += elevator.Direction == Direction.Up ? 1 : -1;
-        }
-
-        elevator.Status = ElevatorStatus.Idle;
-    }
 
     private async Task LoadPassengersAsync(Elevator elevator, int requestedFloor)
     {
@@ -43,4 +30,20 @@ public class ElevatorService : IElevatorService
         }
         await Task.Delay(1000); //Loading time
     }
+
+    public async Task MoveElevatorAsync(Elevator elevator, int destinationFloor)
+    {
+        elevator.SetDestination(destinationFloor);
+        elevator.SetElevatorStatus(ElevatorStatus.Moving);
+
+        while (elevator.CurrentFloor != destinationFloor)
+        {
+            await Task.Delay(1000); //Delay movement simulator
+            elevator.MoveElevator(destinationFloor);
+        }
+
+        elevator.SetElevatorStatus(ElevatorStatus.Idle);
+    }
+
+    
 }
