@@ -1,24 +1,88 @@
-﻿namespace ElevatorChallenge.Infrastructure.UserInterface;
+﻿using ElevatorChallenge.Core.Enums;
+using System.Collections.Concurrent;
+using System.Text;
+
+namespace ElevatorChallenge.Infrastructure.UserInterface;
 
 public class ConsoleUserInterface : IConsoleUserInterface
 {
+    private readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
+    private string _currentDisplay = "";
     public void DisplayElevatorStatus(Building building)
     {
-        Console.Clear();
-        foreach (var elevator in building.Elevators)
+        StringBuilder sb = new StringBuilder();
+        DisplayElevatorDetails(building, sb);
+        DisplayInstructions(sb);
+        string newDisplay = sb.ToString();
+        if (newDisplay != _currentDisplay)
         {
-            Console.WriteLine($"Elevator {elevator.Id}: Floor {elevator.CurrentFloor}, Status: {elevator.Status}, Direction {elevator.Direction}");
+            Console.Clear();
+            Console.Write(newDisplay);
+            _currentDisplay = newDisplay;
         }
     }
 
+    private void DisplayInstructions(StringBuilder sb)
+    {
+        sb.AppendLine("\nRecent Messages:");
+        sb.AppendLine("──────────────────");
+        foreach (var message in _messageQueue.TakeLast(3))
+        {
+            sb.AppendLine(message);
+        }
+
+        sb.AppendLine("\nAvailable Commands:");
+        sb.AppendLine("────────────────────");
+        sb.AppendLine("call <floor> <up/down>    : Call elevator (e.g., 'call 5 up')");
+        sb.AppendLine("move <elevatorId> <floor> : Move elevator (e.g., 'move 1 3')");
+        sb.AppendLine("add <floor> <destFloor>   : Add passenger (e.g., 'add 1 5')");
+        sb.AppendLine("quit                      : Exit simulation");
+
+        sb.Append("\nEnter command:");
+    }
+
+    private static void DisplayElevatorDetails(Building building, StringBuilder sb)
+    {
+        sb.AppendLine("Elevator Simulation Engine".ToUpper());
+        sb.AppendLine("────────────────────────────");
+        sb.AppendLine("\nElevator Status:");
+        sb.AppendLine("────────────────");
+        foreach (var elevator in building.Elevators)
+        {
+            sb.AppendLine($"Elevator {elevator.Id}/{building.Elevators.Count}: Floor {elevator.CurrentFloor}/{building.Floors.Count} | {elevator.Status} | {elevator.Direction} | Passenger:{elevator.Passengers.Count}/{elevator.Capacity}");
+        }
+
+        sb.AppendLine("\nFloor Requests:");
+        sb.AppendLine("─────────────────");
+        for (int i = building.Floors.Count; i > 0; i--)
+        {
+            var floor = building.GetFloor(i);
+            if (floor.ElevatorCallButtons[Direction.Up] == true || floor.ElevatorCallButtons[Direction.Down] == true || floor.WaitingPassengersCount > 0)
+            {
+                sb.Append($"Floor {i}: ");
+                sb.Append(floor.ElevatorCallButtons[Direction.Up] == true ? "▲ " : "  ");
+                sb.Append(floor.ElevatorCallButtons[Direction.Down] == true ? "▼ " : "  ");
+                sb.AppendLine($"Waiting: {floor.WaitingPassengersCount}");
+            }
+        }
+    }
     public async Task<string?> GetUserInputAsync()
     {
-        Console.Write("Enter command (e.g. 'call 5 up' or 'quit'): ");
+        Console.Write("Enter command: ");
         return await Task.Run(() => Console.ReadLine());
     }
 
     public void DisplayMessage(string message)
     {
-        Console.WriteLine(message);
+        _messageQueue.Enqueue(message);
+        if (_messageQueue.Count > 10) // Keep only last 10 messages
+        {
+            _messageQueue.TryDequeue(out _);
+        }
+    }
+
+    public void Initialize()
+    {
+        Console.Clear();
     }
 }

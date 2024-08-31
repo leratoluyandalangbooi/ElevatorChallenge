@@ -40,19 +40,22 @@ public class ElevatorService : IElevatorService
             elevator.UpdateElevatorPosition();
         }
 
-        await OnLoadOrOffloadPassengersAsync(elevator);
+        await OnElevatorArrivedAsync(elevator);
     }
 
-    private async Task OnLoadOrOffloadPassengersAsync(Elevator elevator)
+    public async Task OnElevatorArrivedAsync(Elevator elevator)
     {
-        // Offload passengers
+        await UnloadPassengersAsync(elevator);
+        await LoadPassengersAsync(elevator, elevator.CurrentFloor);
+    }
+
+    private async Task UnloadPassengersAsync(Elevator elevator)
+    {
         var passengersToUnload = elevator.Passengers.Where(p => p.DestinationFloor == elevator.CurrentFloor).ToList();
         foreach (var passenger in passengersToUnload)
         {
             elevator.RemovePassenger(passenger);
         }
-
-        // Onload passengers
-        await LoadPassengersAsync(elevator, elevator.CurrentFloor);
+        await Task.Delay(1000); // Unloading time
     }
 }
