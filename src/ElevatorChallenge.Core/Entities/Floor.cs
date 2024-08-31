@@ -23,10 +23,25 @@ public class Floor
         UpdateElevetorCallButton(passenger.DestinationFloor);
     }
 
-    private void UpdateElevetorCallButton(int destnationFloor)
+    private void UpdateElevetorCallButton(int? destinationFloor = null)
     {
-        var direction = destnationFloor > FloorNumber ? Direction.Up : Direction.Down;
-        ElevatorCallButtons[direction] = true;
+        if (WaitingPassengersCount == 0)
+        {
+            ResetElevatorCallButton();
+        }
+        else
+        {
+            if (destinationFloor.HasValue)
+            {
+                var direction = destinationFloor > FloorNumber ? Direction.Up : Direction.Down;
+                ElevatorCallButtons[direction] = true;
+            }
+            else
+            {
+                ElevatorCallButtons[Direction.Up] = WaitingPassengers.Any(p => p.DestinationFloor > FloorNumber);
+                ElevatorCallButtons[Direction.Down] = WaitingPassengers.Any(p => p.DestinationFloor < FloorNumber);
+            }
+        }
     }
 
     public Passenger? RemoveWaitingPassenger()
@@ -34,7 +49,7 @@ public class Floor
         if (WaitingPassengers.Count == 0) return null;
 
         var passenger = WaitingPassengers.Dequeue();
-        if (WaitingPassengers.Count == 0) ResetElevatorCallButton();
+        UpdateElevetorCallButton();
         return passenger;
     }
 

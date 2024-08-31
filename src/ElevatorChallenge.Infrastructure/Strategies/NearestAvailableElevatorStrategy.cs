@@ -1,4 +1,5 @@
-﻿using ElevatorChallenge.Core.Enums;
+﻿using ElevatorChallenge.Core.Entities;
+using ElevatorChallenge.Core.Enums;
 
 namespace ElevatorChallenge.Infrastructure.Strategies;
 
@@ -28,5 +29,27 @@ public class NearestAvailableElevatorStrategy : INearestAvailableElevatorStrateg
 
         // Lower priority for elevators moving in the opposite direction
         return distance + 1000;
+    }
+
+    public int GetNextDestination(Elevator elevator, Building building)
+    {
+        var floorsWithRequests = building.Floors.Where(f => f.ElevatorCallButtons[elevator.Direction] == true).ToList();
+
+        // First, check if there are any requests in the elevator's current direction
+        var sameDirectionFloors = floorsWithRequests.Where(f =>
+            (elevator.Direction == Direction.Up && f.FloorNumber > elevator.CurrentFloor) ||
+            (elevator.Direction == Direction.Down && f.FloorNumber < elevator.CurrentFloor)).ToList();
+
+        if (sameDirectionFloors.Any())
+        {
+            return sameDirectionFloors
+                .OrderBy(f => Math.Abs(f.FloorNumber - elevator.CurrentFloor))
+                .First().FloorNumber;
+        }
+
+        // If no requests in the current direction, find the nearest request
+        return floorsWithRequests
+            .OrderBy(f => Math.Abs(f.FloorNumber - elevator.CurrentFloor))
+            .First().FloorNumber;
     }
 }

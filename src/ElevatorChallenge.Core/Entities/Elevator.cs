@@ -28,16 +28,26 @@ public class Elevator
 
     public void MoveElevator(int destinationFloor)
     {
+        //if (destinationFloor == CurrentFloor)
+        //{
+        //    SetIdle();
+        //    return;
+        //}
+
+        //DestinationFloor = destinationFloor;
+        //Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
+        //Status = ElevatorStatus.Moving;
+
         if (destinationFloor == CurrentFloor)
         {
-            Direction = Direction.Stationary;
-            Status = ElevatorStatus.Idle;
-            return;
+            SetIdle();
         }
-
-        DestinationFloor = destinationFloor;
-        Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
-        Status = ElevatorStatus.Moving;
+        else
+        {
+            Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
+            Status = ElevatorStatus.Moving;
+            DestinationFloor = destinationFloor;
+        }
     }
 
     public void UpdateElevatorPosition()
@@ -53,8 +63,7 @@ public class Elevator
 
         if (CurrentFloor == DestinationFloor)
         {
-            Status = ElevatorStatus.Idle;
-            Direction = Direction.Stationary;
+            SetIdle();
         }
     }
 
@@ -76,5 +85,11 @@ public class Elevator
     public bool CanAddPassenger(Passenger passenger)
     {
         return Passengers.Count < Capacity && CurrentWeight + passenger.Weight < WeightLimit;
+    }
+
+    public void SetIdle()
+    {
+        Status = ElevatorStatus.Idle;
+        Direction = Direction.Stationary;
     }
 }
