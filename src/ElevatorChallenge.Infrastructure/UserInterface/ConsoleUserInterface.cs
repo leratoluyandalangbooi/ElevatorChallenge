@@ -1,4 +1,5 @@
 ﻿using ElevatorChallenge.Core.Enums;
+using ElevatorChallenge.Infrastructure.Wrappers;
 using System.Collections.Concurrent;
 using System.Text;
 
@@ -8,6 +9,13 @@ public class ConsoleUserInterface : IConsoleUserInterface
 {
     private readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
     private string _currentDisplay = "";
+    private readonly IConsoleWrapper _console;
+
+    public ConsoleUserInterface(IConsoleWrapper console = null)
+    {
+        _console = console ?? new ConsoleWrapper();
+    }
+
     public void DisplayElevatorStatus(Building building)
     {
         StringBuilder sb = new StringBuilder();
@@ -16,8 +24,8 @@ public class ConsoleUserInterface : IConsoleUserInterface
         string newDisplay = sb.ToString();
         if (newDisplay != _currentDisplay)
         {
-            Console.Clear();
-            Console.Write(newDisplay);
+            _console.Clear();
+            _console.Write(newDisplay);
             _currentDisplay = newDisplay;
         }
     }
@@ -68,8 +76,8 @@ public class ConsoleUserInterface : IConsoleUserInterface
     }
     public async Task<string?> GetUserInputAsync()
     {
-        Console.Write("Enter command: ");
-        return await Task.Run(() => Console.ReadLine());
+        _console.Write("Enter command: ");
+        return await Task.Run(() => _console.ReadLine());
     }
 
     public void DisplayMessage(string message)
@@ -83,6 +91,6 @@ public class ConsoleUserInterface : IConsoleUserInterface
 
     public void Initialize()
     {
-        Console.Clear();
+        _console.Clear();
     }
 }
