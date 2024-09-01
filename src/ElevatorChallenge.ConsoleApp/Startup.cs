@@ -1,7 +1,7 @@
 ﻿using ElevatorChallenge.Application.Services;
 using ElevatorChallenge.Core.Entities;
 using ElevatorChallenge.Core.Interfaces;
-using ElevatorChallenge.Infrastructure.Strategies;
+using ElevatorChallenge.Application.Strategies;
 using ElevatorChallenge.Infrastructure.UserInterface;
 using Microsoft.Extensions.DependencyInjection;
 
