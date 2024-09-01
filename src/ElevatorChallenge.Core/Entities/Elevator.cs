@@ -1,5 +1,4 @@
-﻿
-namespace ElevatorChallenge.Core.Entities;
+﻿namespace ElevatorChallenge.Core.Entities;
 
 public class Elevator
 {
@@ -28,16 +27,6 @@ public class Elevator
 
     public void MoveElevator(int destinationFloor)
     {
-        //if (destinationFloor == CurrentFloor)
-        //{
-        //    SetIdle();
-        //    return;
-        //}
-
-        //DestinationFloor = destinationFloor;
-        //Direction = destinationFloor > CurrentFloor ? Direction.Up : Direction.Down;
-        //Status = ElevatorStatus.Moving;
-
         if (destinationFloor == CurrentFloor)
         {
             SetIdle();
@@ -74,9 +63,9 @@ public class Elevator
             throw new ElevatorException("Cannot add passenger: Elevator capacity or weight limit reached");
         }
 
-        Passengers.Add(passenger);
+        Passengers.Add(passenger); 
     }
-
+    
     public void RemovePassenger(Passenger passenger)
     {
         Passengers.Remove(passenger);

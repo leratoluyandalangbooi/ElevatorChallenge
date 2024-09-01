@@ -1,7 +1,4 @@
-﻿using ElevatorChallenge.Core.Entities;
-using ElevatorChallenge.Core.Enums;
-
-namespace ElevatorChallenge.Infrastructure.Strategies;
+﻿namespace ElevatorChallenge.Application.Strategies;
 
 public class NearestAvailableElevatorStrategy : INearestAvailableElevatorStrategy
 {
