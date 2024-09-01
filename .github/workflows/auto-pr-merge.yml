@@ -34,6 +34,10 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
+          use_oidc: false
+          disable_search: true
   auto-pr-merge:
     needs: build-and-test
     runs-on: ubuntu-latest
