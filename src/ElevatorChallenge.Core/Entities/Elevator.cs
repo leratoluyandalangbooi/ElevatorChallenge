@@ -4,7 +4,7 @@ public class Elevator
 {
     public int Id { get; private set; }
     public int CurrentFloor { get; set; }
-    public Direction Direction { get; private set; }
+    public Direction Direction { get; set; }
     public ElevatorStatus Status { get; set; }
     public List<Passenger> Passengers { get; }
     public int Capacity { get; }

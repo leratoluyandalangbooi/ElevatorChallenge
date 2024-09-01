@@ -26,6 +26,7 @@ public class SimulationEngineTests
 
         _mockUserInterface.Verify(ui => ui.Initialize(), Times.Once);
         _mockUserInterface.Verify(ui => ui.DisplayElevatorStatus(_mockBuilding.Object), Times.AtLeastOnce);
+        _mockUserInterface.Verify(ui => ui.GetUserInputAsync(), Times.AtLeastOnce);
     }
 
     [Fact]
