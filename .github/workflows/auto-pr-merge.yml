@@ -34,6 +34,8 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          working-directory: ${{github.workspace}}/tests
+          files: ${{github.workspace}}/tests/coverage.info
           fail_ci_if_error: true
           verbose: true
           use_oidc: false
