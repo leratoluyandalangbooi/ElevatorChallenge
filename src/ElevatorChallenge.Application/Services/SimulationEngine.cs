@@ -1,7 +1,4 @@
-﻿using ElevatorChallenge.Core.Entities;
-using System.IO;
-
-namespace ElevatorChallenge.Application.Services;
+﻿namespace ElevatorChallenge.Application.Services;
 
 public class SimulationEngine
 {
