@@ -1,5 +1,4 @@
-﻿using ElevatorChallenge.Core.Enums;
-using ElevatorChallenge.Infrastructure.Wrappers;
+﻿using ElevatorChallenge.Infrastructure.Wrappers;
 using System.Collections.Concurrent;
 using System.Text;
 
