@@ -18,7 +18,6 @@ public class ElevatorService : IElevatorService
     public async Task DispatchElevatorAsync(int requestedFloor, Direction direction)
     {
         InputValidator.ValidateFloorNumber(requestedFloor, _building.Floors.Count);
-        InputValidator.ValidateElevatorId(requestedFloor, _building.Elevators.Count);
         InputValidator.ValidateDirection(direction);
 
         try
