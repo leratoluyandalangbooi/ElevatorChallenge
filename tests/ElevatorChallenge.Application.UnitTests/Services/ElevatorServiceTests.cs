@@ -73,4 +73,27 @@ public class ElevatorServiceTests
         await Assert.ThrowsAsync<Exception>(() => _elevatorService.DispatchElevatorAsync(5, Direction.Up));
         _mockLogger.Verify(l => l.LogError("Error dispatching elevator", It.IsAny<Exception>()), Times.Once);
     }
+
+    [Fact]
+    public async Task DispatchElevatorAsync_ShouldValidateFloorNumberExceptionWhenIncorrectFloorNumberInput()
+    {
+        var requestFloor = 100; //non existing floor
+
+        _mockStrategy.Setup(s => s.SelectElevator((List<Elevator>)It.IsAny<IEnumerable<Elevator>>(), requestFloor, It.IsAny<Direction>()))
+                     .Throws(new ArgumentOutOfRangeException("Test maximum floor exception"));
+
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _elevatorService.DispatchElevatorAsync(requestFloor, Direction.Up));
+    }
+
+    [Fact]
+    public async Task DispatchElevatorAsync_ShouldValidateDirectionExceptionWhenIncorrectDirectionInput()
+    {
+        var directionInput = Enum.TryParse<Direction>("left", true, out Direction result); //non existing direction
+        var requestFloor = 5;
+
+        _mockStrategy.Setup(s => s.SelectElevator((List<Elevator>)It.IsAny<IEnumerable<Elevator>>(), It.IsAny<int>(), result))
+                     .Throws(new ArgumentException("Test Invalid direction"));
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _elevatorService.DispatchElevatorAsync(requestFloor, result));
+    }
 }

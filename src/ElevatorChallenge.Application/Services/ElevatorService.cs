@@ -1,4 +1,6 @@
-﻿namespace ElevatorChallenge.Application.Services;
+﻿using ElevatorChallenge.Core.Shared;
+
+namespace ElevatorChallenge.Application.Services;
 
 public class ElevatorService : IElevatorService
 {
@@ -15,6 +17,9 @@ public class ElevatorService : IElevatorService
 
     public async Task DispatchElevatorAsync(int requestedFloor, Direction direction)
     {
+        InputValidator.ValidateFloorNumber(requestedFloor, _building.Floors.Count);
+        InputValidator.ValidateDirection(direction);
+
         try
         {
             var elevator = _elevatorDispatchStrategy.SelectElevator(_building.Elevators, requestedFloor, direction);
